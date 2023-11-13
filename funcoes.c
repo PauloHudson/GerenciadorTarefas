@@ -319,3 +319,68 @@ void filtrarPorEstado(const char *nomeArquivo) {
     printf("Nenhuma tarefa encontrada com o estado especificado.\n");
   }
 }
+
+// Função para comparar prioridades ao usar a função qsort
+int compararPrioridades(const void *a, const void *b) {
+  return ((struct ListaTarefas *)b)->prioridade -
+         ((struct ListaTarefas *)a)->prioridade;
+}
+
+// Função para filtrar tarefas por categoria e exibir ordenadas por prioridade
+// --------------------------------------------------------------------------------------------
+void filtrarPorCategoriaOrdenado(const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "rb");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return;
+  }
+
+  char categoriaFiltrar[50];
+  printf("Digite a categoria para filtrar as tarefas: ");
+  scanf(" %[^\n]", categoriaFiltrar);
+
+  struct ListaTarefas *tarefas;
+  int tamanho = 0;
+
+  // Contar quantas tarefas existem com a categoria especificada
+  struct ListaTarefas tarefaTemp;
+  while (fread(&tarefaTemp, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (strcmp(tarefaTemp.Categoria, categoriaFiltrar) == 0) {
+      tamanho++;
+    }
+  }
+
+  // Alocar memória para armazenar as tarefas com a categoria especificada
+  tarefas = malloc(tamanho * sizeof(struct ListaTarefas));
+
+  // Voltar para o início do arquivo para ler as tarefas novamente
+  rewind(arquivo);
+
+  // Preencher o array de tarefas com a categoria especificada
+  int index = 0;
+  while (fread(&tarefaTemp, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (strcmp(tarefaTemp.Categoria, categoriaFiltrar) == 0) {
+      tarefas[index++] = tarefaTemp;
+    }
+  }
+
+  fclose(arquivo);
+
+  if (tamanho > 0) {
+    // Ordenar tarefas por prioridade
+    qsort(tarefas, tamanho, sizeof(struct ListaTarefas), compararPrioridades);
+
+    // Exibir tarefas ordenadas
+    for (int i = 0; i < tamanho; i++) {
+      printf("\n   Prioridade: %d\n", tarefas[i].prioridade);
+      printf("   Descrição: %s\n", tarefas[i].Descricao);
+      printf("   Categoria: %s\n", tarefas[i].Categoria);
+      printf("   Estado: %s\n", tarefas[i].Estado);
+    }
+
+    // Liberar a memória alocada
+    free(tarefas);
+  } else {
+    printf("Nenhuma tarefa encontrada com a categoria especificada.\n");
+  }
+}

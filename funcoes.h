@@ -19,6 +19,8 @@ void salvarDados(struct ListaTarefas *tarefa, const char *nomeArquivo);
 void alterarTarefa(const char *nomeArquivo);
 void filtrarPorPrioridade(const char *nomeArquivo);
 void filtrarPorEstado(const char *nomeArquivo);
+int compararPrioridades(const void *a, const void *b);
+void filtrarPorCategoriaOrdenado(const char *nomeArquivo);
 
 
 #ifndef UNTITLED_FUNCOES_H
