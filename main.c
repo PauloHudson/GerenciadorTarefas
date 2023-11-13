@@ -71,6 +71,10 @@ int main() {
       printf("\n");
       exportarPorCategoria("tarefas.bin");
       break;
+    case 11:
+      printf("\n");
+      exportarPorPrioridadeECategoria("tarefas.bin");
+      break;
     case 0:
       printf("\n   Opção 0 - Sair\n");
       break;
