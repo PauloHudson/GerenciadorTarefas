@@ -59,6 +59,10 @@ int main() {
       printf("\n");
       filtrarPorCategoriaOrdenado("tarefas.bin");
       break;
+    case 8:
+      printf("\n");
+      filtrarPorPrioridadeECategoria("tarefas.bin");
+      break;
     case 0:
       printf("\n   Opção 0 - Sair\n");
       break;

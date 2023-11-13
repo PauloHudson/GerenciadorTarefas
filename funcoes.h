@@ -21,7 +21,7 @@ void filtrarPorPrioridade(const char *nomeArquivo);
 void filtrarPorEstado(const char *nomeArquivo);
 int compararPrioridades(const void *a, const void *b);
 void filtrarPorCategoriaOrdenado(const char *nomeArquivo);
-
+void filtrarPorPrioridadeECategoria(const char *nomeArquivo);
 
 #ifndef UNTITLED_FUNCOES_H
 #define UNTITLED_FUNCOES_H
