@@ -135,3 +135,82 @@ int excluirTarefaPorCategoriaEDescricao(const char *nomeArquivo,
 
   return tarefaExcluida;
 }
+
+// Função para alterar dados da tarefa
+//  ----------------------------------------------------------------------------------------------
+void alterarTarefa(const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "rb");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return;
+  }
+
+  FILE *temporario = fopen("temporario.bin", "wb");
+  if (temporario == NULL) {
+    perror("Erro ao criar arquivo temporário");
+    fclose(arquivo);
+    return;
+  }
+
+  struct ListaTarefas tarefa;
+  int tarefaEncontrada = 0;
+  char categoria[50];
+  char descricao[100];
+
+  printf("Digite a categoria da tarefa que deseja alterar: ");
+  scanf(" %[^\n]", categoria);
+
+  printf("Digite a descrição da tarefa que deseja alterar: ");
+  scanf(" %[^\n]", descricao);
+
+  while (fread(&tarefa, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (strcmp(tarefa.Categoria, categoria) == 0 &&
+        strcmp(tarefa.Descricao, descricao) == 0) {
+      // Tarefa encontrada, permita ao usuário escolher o campo para alteração
+      tarefaEncontrada = 1;
+
+      printf("Tarefa encontrada. Escolha o campo para alterar:\n");
+      printf("(1) - Prioridade\n");
+      printf("(2) - Descrição\n");
+      printf("(3) - Categoria\n");
+      printf("(4) - Estado\n");
+
+      int opcao;
+      scanf("%d", &opcao);
+
+      switch (opcao) {
+      case 1:
+        printf("Digite a nova prioridade: ");
+        scanf("%d", &tarefa.prioridade);
+        break;
+      case 2:
+        printf("Digite a nova descrição: ");
+        scanf(" %[^\n]", tarefa.Descricao);
+        break;
+      case 3:
+        printf("Digite a nova categoria: ");
+        scanf(" %[^\n]", tarefa.Categoria);
+        break;
+      case 4:
+        printf("Digite o novo estado: ");
+        scanf(" %[^\n]", tarefa.Estado);
+        break;
+      default:
+        printf("Opção inválida\n");
+      }
+    }
+    fwrite(&tarefa, sizeof(struct ListaTarefas), 1, temporario);
+  }
+
+  fclose(arquivo);
+  fclose(temporario);
+
+  if (tarefaEncontrada) {
+    remove(nomeArquivo);
+    rename("temporario.bin", nomeArquivo);
+    printf("Tarefa alterada com sucesso!\n");
+  } else {
+    printf("Tarefa não encontrada.\n");
+    remove("temporario.bin");
+  }
+}

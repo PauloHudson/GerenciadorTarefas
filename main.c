@@ -42,7 +42,10 @@ int main() {
                "encontrada.\n",
                categoriaParaExcluir, descricaoParaExcluir);
       }
-
+      break;
+    case 4:
+      printf("\n");
+      alterarTarefa("tarefas.bin");
       break;
     case 0:
       printf("\n   Opção 0 - Sair\n");
