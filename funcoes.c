@@ -249,3 +249,73 @@ void filtrarPorPrioridade(const char *nomeArquivo) {
     printf("Nenhuma tarefa encontrada com a prioridade especificada.\n");
   }
 }
+
+// Função para filtrar tarefas por prioridade
+// --------------------------------------------------------------------------------------------
+void filtrarPorPrioridade(const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "rb");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return;
+  }
+
+  int prioridadeFiltrar;
+  printf("Digite a prioridade para filtrar as tarefas: ");
+  scanf("%d", &prioridadeFiltrar);
+
+  struct ListaTarefas tarefa;
+  int tarefasEncontradas = 0;
+
+  while (fread(&tarefa, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (tarefa.prioridade == prioridadeFiltrar) {
+      // Tarefa encontrada, exiba na tela
+      tarefasEncontradas = 1;
+
+      printf("\n   Prioridade: %d\n", tarefa.prioridade);
+      printf("   Descrição: %s\n", tarefa.Descricao);
+      printf("   Categoria: %s\n", tarefa.Categoria);
+      printf("   Estado: %s\n", tarefa.Estado);
+    }
+  }
+
+  fclose(arquivo);
+
+  if (!tarefasEncontradas) {
+    printf("Nenhuma tarefa encontrada com a prioridade especificada.\n");
+  }
+}
+
+// Função para filtrar tarefas por estado
+// --------------------------------------------------------------------------------------------
+void filtrarPorEstado(const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "rb");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return;
+  }
+
+  char estadoFiltrar[50];
+  printf("Digite o estado para filtrar as tarefas: ");
+  scanf(" %[^\n]", estadoFiltrar);
+
+  struct ListaTarefas tarefa;
+  int tarefasEncontradas = 0;
+
+  while (fread(&tarefa, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (strcmp(tarefa.Estado, estadoFiltrar) == 0) {
+      // Tarefa encontrada, exiba na tela
+      tarefasEncontradas = 1;
+
+      printf("\n   Prioridade: %d\n", tarefa.prioridade);
+      printf("   Descrição: %s\n", tarefa.Descricao);
+      printf("   Categoria: %s\n", tarefa.Categoria);
+      printf("   Estado: %s\n", tarefa.Estado);
+    }
+  }
+
+  fclose(arquivo);
+
+  if (!tarefasEncontradas) {
+    printf("Nenhuma tarefa encontrada com o estado especificado.\n");
+  }
+}
