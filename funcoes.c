@@ -447,3 +447,44 @@ void filtrarPorPrioridadeECategoria(const char *nomeArquivo) {
            "especificadas.\n");
   }
 }
+
+// Função para exportar tarefas por prioridade para um arquivo de texto
+// --------------------------------------------------------------------------------------------
+void exportarPorPrioridade(const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "rb");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return;
+  }
+
+  int prioridadeFiltrar;
+  printf("Digite a prioridade para exportar as tarefas: ");
+  scanf("%d", &prioridadeFiltrar);
+
+  char nomeArquivoExportacao[100];
+  printf("Digite o nome do arquivo de texto para exportar as tarefas: ");
+  scanf(" %[^\n]", nomeArquivoExportacao);
+
+  FILE *arquivoExportacao = fopen(nomeArquivoExportacao, "w");
+  if (arquivoExportacao == NULL) {
+    perror("Erro ao criar o arquivo de exportação");
+    fclose(arquivo);
+    return;
+  }
+
+  struct ListaTarefas tarefa;
+
+  while (fread(&tarefa, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (tarefa.prioridade == prioridadeFiltrar) {
+      // Escrever no arquivo de exportação
+      fprintf(arquivoExportacao, "%d, %s, %s, %s\n", tarefa.prioridade,
+              tarefa.Categoria, tarefa.Estado, tarefa.Descricao);
+    }
+  }
+
+  fclose(arquivo);
+  fclose(arquivoExportacao);
+
+  printf("Tarefas exportadas com sucesso para o arquivo %s.\n",
+         nomeArquivoExportacao);
+}
