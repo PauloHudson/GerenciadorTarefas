@@ -488,3 +488,75 @@ void exportarPorPrioridade(const char *nomeArquivo) {
   printf("Tarefas exportadas com sucesso para o arquivo %s.\n",
          nomeArquivoExportacao);
 }
+// Função para exportar tarefas por categoria para um arquivo de texto
+// --------------------------------------------------------------------------------------------
+void exportarPorCategoria(const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "rb");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return;
+  }
+
+  char categoriaFiltrar[50];
+  printf("Digite a categoria para exportar as tarefas: ");
+  scanf(" %[^\n]", categoriaFiltrar);
+
+  char nomeArquivoExportacao[100];
+  printf("Digite o nome do arquivo de texto para exportar as tarefas: ");
+  scanf(" %[^\n]", nomeArquivoExportacao);
+
+  FILE *arquivoExportacao = fopen(nomeArquivoExportacao, "w");
+  if (arquivoExportacao == NULL) {
+    perror("Erro ao criar o arquivo de exportação");
+    fclose(arquivo);
+    return;
+  }
+
+  struct ListaTarefas *tarefas;
+  int tamanho = 0;
+
+  // Contar quantas tarefas existem com a categoria especificada
+  struct ListaTarefas tarefaTemp;
+  while (fread(&tarefaTemp, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (strcmp(tarefaTemp.Categoria, categoriaFiltrar) == 0) {
+      tamanho++;
+    }
+  }
+
+  // Alocar memória para armazenar as tarefas com a categoria especificada
+  tarefas = malloc(tamanho * sizeof(struct ListaTarefas));
+
+  // Voltar para o início do arquivo para ler as tarefas novamente
+  rewind(arquivo);
+
+  // Preencher o array de tarefas com a categoria especificada
+  int index = 0;
+  while (fread(&tarefaTemp, sizeof(struct ListaTarefas), 1, arquivo) == 1) {
+    if (strcmp(tarefaTemp.Categoria, categoriaFiltrar) == 0) {
+      tarefas[index++] = tarefaTemp;
+    }
+  }
+
+  fclose(arquivo);
+
+  if (tamanho > 0) {
+    // Ordenar tarefas por prioridade
+    qsort(tarefas, tamanho, sizeof(struct ListaTarefas), compararPrioridades);
+
+    // Exibir tarefas ordenadas no arquivo de exportação
+    for (int i = 0; i < tamanho; i++) {
+      fprintf(arquivoExportacao, "%d, %s, %s, %s\n", tarefas[i].prioridade,
+              tarefas[i].Categoria, tarefas[i].Estado, tarefas[i].Descricao);
+    }
+
+    // Liberar a memória alocada
+    free(tarefas);
+  } else {
+    printf("Nenhuma tarefa encontrada com a categoria especificada.\n");
+  }
+
+  fclose(arquivoExportacao);
+
+  printf("Tarefas exportadas com sucesso para o arquivo %s.\n",
+         nomeArquivoExportacao);
+}
