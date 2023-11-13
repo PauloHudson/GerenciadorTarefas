@@ -42,7 +42,38 @@ int main() {
                "encontrada.\n",
                categoriaParaExcluir, descricaoParaExcluir);
       }
-
+      break;
+    case 4:
+      printf("\n");
+      alterarTarefa("tarefas.bin");
+      break;
+    case 5:
+      printf("\n");
+      filtrarPorPrioridade("tarefas.bin");
+      break;
+    case 6:
+      printf("\n");
+      filtrarPorEstado("tarefas.bin");
+      break;
+    case 7:
+      printf("\n");
+      filtrarPorCategoriaOrdenado("tarefas.bin");
+      break;
+    case 8:
+      printf("\n");
+      filtrarPorPrioridadeECategoria("tarefas.bin");
+      break;
+    case 9:
+      printf("\n");
+      exportarPorPrioridade("tarefas.bin");
+      break;
+    case 10:
+      printf("\n");
+      exportarPorCategoria("tarefas.bin");
+      break;
+    case 11:
+      printf("\n");
+      exportarPorPrioridadeECategoria("tarefas.bin");
       break;
     case 0:
       printf("\n   Opção 0 - Sair\n");
