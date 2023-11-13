@@ -47,6 +47,10 @@ int main() {
       printf("\n");
       alterarTarefa("tarefas.bin");
       break;
+    case 5:
+      printf("\n");
+      filtrarPorPrioridade("tarefas.bin");
+      break;
     case 0:
       printf("\n   Opção 0 - Sair\n");
       break;

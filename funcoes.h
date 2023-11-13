@@ -17,6 +17,7 @@ int excluirTarefaPorCategoriaEDescricao(const char *nomeArquivo,
                                         const char *descricao);
 void salvarDados(struct ListaTarefas *tarefa, const char *nomeArquivo);
 void alterarTarefa(const char *nomeArquivo);
+void filtrarPorPrioridade(const char *nomeArquivo);
 
 
 #ifndef UNTITLED_FUNCOES_H
